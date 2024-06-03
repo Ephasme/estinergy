@@ -1,4 +1,4 @@
-import { emailAtom } from "@/atoms";
+import { emailAtom } from "@/store/atoms";
 import { useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { z } from "zod";

@@ -1,21 +1,27 @@
-import { appliancesAtom } from "@/atoms";
+import { appliancesAtom } from "@/store/atoms";
 import { APPLIANCES } from "@/constants";
+import { AddCircle } from "@mui/icons-material";
+import cn from "clsx";
 import { produce } from "immer";
 import { useAtom } from "jotai";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { AddCircle } from "@mui/icons-material";
 import { useMemo } from "react";
-import cn from "clsx";
 
-export const ApplianceCard = ({
-  src,
-  slug,
-  disabled,
-}: {
-  src: string;
-  slug: string;
-  disabled: boolean;
-}) => {
+const AddButton = ({ onClick = () => {} }: { onClick?: () => void }) => {
+  return (
+    <button
+      onClick={onClick}
+      className={
+        "flex items-center gap-1 rounded-full text-sm border px-4 py-1 border-[#23DCCA]"
+      }
+    >
+      <span className={"font-bold text-[#23DCCA]"}>Add</span>
+      <AddCircle sx={{ fill: "#23DCCA", fontSize: 18 }} />
+    </button>
+  );
+};
+
+export const ApplianceCard = ({ src, slug }: { src: string; slug: string }) => {
   const [appliances, setAppliances] = useAtom(appliancesAtom);
 
   const qty = useMemo(() => {
@@ -52,7 +58,7 @@ export const ApplianceCard = ({
   return (
     <div
       className={cn(
-        "p-4 rounded-2xl flex flex-col items-center justify-center gap-3 ",
+        "p-6 rounded-2xl flex flex-col items-center justify-center gap-3 ",
         {
           "bg-[#0B3179]": qty === 0,
           "bg-[#23DCCA]": qty > 0,
@@ -68,7 +74,7 @@ export const ApplianceCard = ({
       >
         {applianceClass.name}
       </div>
-      <div className="inline-flex gap-1">
+      <div className="inline-flex items-center gap-1">
         <div
           className={cn("text-xs", {
             "text-white": qty === 0,
@@ -77,7 +83,12 @@ export const ApplianceCard = ({
         >
           Category {applianceClass.category}
         </div>
-        <div className=""></div>
+        <div
+          className={cn("h-1 w-1  rounded-full", {
+            "bg-[#23DCCA]": qty === 0,
+            "bg-white": qty > 0,
+          })}
+        ></div>
         <div
           className={cn("text-xs", {
             "text-white": qty === 0,
@@ -93,26 +104,9 @@ export const ApplianceCard = ({
           "text-black": qty > 0,
         })}
       ></div>
-      {disabled && (
-        <button
-          disabled={true}
-          className="flex items-center gap-1 mt-3 rounded-full text-sm border px-4 py-1 border-[#637AA6]"
-        >
-          <span className="font-bold text-[#637AA6]">Add</span>
-          <AddCircle sx={{ fill: "#637AA6", fontSize: 18 }} />
-        </button>
-      )}
-      {!disabled && qty === 0 && (
-        <button
-          className="flex items-center gap-1 mt-3 rounded-full text-sm border px-4 py-1 border-[#23DCCA]"
-          onClick={addAppliance}
-        >
-          <span className="font-bold text-[#23DCCA]">Add</span>
-          <AddCircle sx={{ fill: "#23DCCA", fontSize: 18 }} />
-        </button>
-      )}
-      {!disabled && qty > 0 && (
-        <div className="mt-3 flex items-center gap-2 bg-white px-4 py-1 rounded-full">
+      {qty === 0 && <AddButton onClick={addAppliance} />}
+      {qty > 0 && (
+        <div className="flex items-center gap-2 bg-white px-4 py-1 rounded-full">
           {qty === 1 && (
             <button>
               <Trash2 color="#FA4B60" size={16} onClick={removeAppliance} />

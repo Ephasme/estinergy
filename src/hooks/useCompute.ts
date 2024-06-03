@@ -2,7 +2,7 @@ import {
   totalConsumptionAtom,
   appliancesAtom,
   nbOfAppliancesByCategoryAtom,
-} from "@/atoms";
+} from "@/store/atoms";
 import { compute } from "@/lib/compute";
 import { useAtomValue } from "jotai";
 

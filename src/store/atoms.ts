@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { ApplianceWithConsumption, ApplianceWithId } from "@/types/Appliance";
-import { Category } from "./types/Category";
-import { MINIMAL_RUNTIME_BY_CATEGORY } from "./constants";
+import { Category } from "@/types/Category";
+import { MINIMAL_RUNTIME_BY_CATEGORY } from "@/constants";
 import _ from "lodash";
 
 export const emailAtom = atom<string | null>(null);
