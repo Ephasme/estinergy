@@ -3,36 +3,37 @@ import {
   totalConsumptionAtom,
   totalConsumptionMinAtom,
 } from "@/atoms";
-import { TextField } from "@mui/material";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
 const totalConsumptionSchema = z.coerce
-  .number({ message: "Total consumption should be a valid number" })
-  .positive({ message: "Total consumption should be a positive value" })
-  .max(75, { message: "Total consumption should be less than 75 kWh" });
+  .number({ message: "Should be a valid number" })
+  .positive({ message: "Should be a positive value" })
+  .max(75, { message: "Should be less than 75 kWh" });
 
 export function TotalConsumptionInput() {
-  const [inputValue, setInputValue] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
-  const [touched, setTouched] = useState(false);
+  const [blurred, setBlurred] = useState(false);
   const setTotalConsumption = useSetAtom(totalConsumptionAtom);
   const setAppliancesWithConsumption = useSetAtom(
     appliancesWithConsumptionAtom
   );
   const totalConsumptionMin = useAtomValue(totalConsumptionMinAtom);
+  const hasErrors = errors.length > 0;
 
   useEffect(() => {
-    if (!touched) {
+    if (!blurred) {
       return;
     }
+    console.log("test");
     setErrors([]);
     const maybeTotalConsumption = totalConsumptionSchema
       .min(totalConsumptionMin / 1000, {
-        message: `Total consumption should be greater than ${
+        message: `Should be at least ${Math.ceil(
           totalConsumptionMin / 1000
-        } kWh`,
+        )} kWh`,
       })
       .safeParse(inputValue);
     if (maybeTotalConsumption.success) {
@@ -48,22 +49,30 @@ export function TotalConsumptionInput() {
     setAppliancesWithConsumption,
     setTotalConsumption,
     totalConsumptionMin,
-    touched,
+    blurred,
   ]);
 
   return (
-    <div>
-      <TextField
-        size="small"
-        value={inputValue}
-        type="number"
-        placeholder="Total consumption..."
-        onChange={(ev) => {
-          setTouched(true);
-          setInputValue(ev.target.value);
-        }}
-      />
-      {errors.length > 0 && errors.map((error) => <div>{error}</div>)}
+    <div className="relative">
+      <div className="relative">
+        <input
+          className="w-full bg-[#001846] px-4 py-3 outline-none text-sm rounded-lg placeholder-[#3D5B8C]"
+          placeholder="00"
+          value={inputValue}
+          onChange={(ev) => setInputValue(ev.target.value)}
+          onBlur={() => setBlurred(true)}
+        />
+        <div className="text-sm absolute right-3 top-0 translate-y-1/2">
+          kWh
+        </div>
+      </div>
+      {hasErrors && (
+        <div className="absolute -bottom-2 translate-y-[100%] bg-[#E93535] px-3 py-1 rounded-lg">
+          {errors.map((message) => (
+            <div className="text-white text-sm">{message}</div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

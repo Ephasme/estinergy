@@ -1,5 +1,4 @@
 import { emailAtom } from "@/atoms";
-import { TextField } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -10,12 +9,13 @@ const emailSchema = z
 
 export function EmailInput() {
   const [inputValue, setInputValue] = useState("");
-  const [touched, setTouched] = useState(false);
+  const [blurred, setBlurred] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+  const hasErrors = errors.length > 0;
   const setEmail = useSetAtom(emailAtom);
 
   useEffect(() => {
-    if (!touched) {
+    if (!blurred) {
       return;
     }
     setErrors([]);
@@ -28,21 +28,27 @@ export function EmailInput() {
         setErrors((prev) => [...prev, error.message]);
       }
     }
-  }, [inputValue, setEmail, touched]);
+  }, [inputValue, setEmail, blurred]);
 
   return (
-    <div className="w-full">
-      <TextField
-        size="small"
-        fullWidth
+    <div className="relative">
+      <input
+        className="w-full bg-[#001846] px-4 py-3 outline-none text-sm rounded-lg placeholder-[#3D5B8C]"
         value={inputValue}
-        placeholder="Please enter your email..."
+        placeholder="loup.peluso@gmail.com"
         onChange={(ev) => {
-          setTouched(true);
           setInputValue(ev.target.value);
         }}
+        onBlur={() => setBlurred(true)}
       />
-      {errors.length > 0 && errors.map((message) => <div>{message}</div>)}
+      <div className="absolute -bottom-2 translate-y-[100%]">
+        {hasErrors &&
+          errors.map((message) => (
+            <div className="bg-[#E93535] px-3 py-1 rounded-lg text-white text-sm">
+              {message}
+            </div>
+          ))}
+      </div>
     </div>
   );
 }

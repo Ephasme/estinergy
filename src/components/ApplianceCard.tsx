@@ -7,7 +7,15 @@ import { AddCircle } from "@mui/icons-material";
 import { useMemo } from "react";
 import cn from "clsx";
 
-export const ApplianceCard = ({ src, slug }: { src: string; slug: string }) => {
+export const ApplianceCard = ({
+  src,
+  slug,
+  disabled,
+}: {
+  src: string;
+  slug: string;
+  disabled: boolean;
+}) => {
   const [appliances, setAppliances] = useAtom(appliancesAtom);
 
   const qty = useMemo(() => {
@@ -44,7 +52,7 @@ export const ApplianceCard = ({ src, slug }: { src: string; slug: string }) => {
   return (
     <div
       className={cn(
-        "p-5 rounded-2xl flex flex-col items-center justify-center gap-3 ",
+        "p-4 rounded-2xl flex flex-col items-center justify-center gap-3 ",
         {
           "bg-[#0B3179]": qty === 0,
           "bg-[#23DCCA]": qty > 0,
@@ -53,22 +61,48 @@ export const ApplianceCard = ({ src, slug }: { src: string; slug: string }) => {
     >
       <img className="h-20 w-20" src={src} />
       <div
-        className={cn("text-sm -mb-2", {
+        className={cn("text-sm", {
           "text-white": qty === 0,
           "text-black": qty > 0,
         })}
       >
-        {applianceClass.name} ({applianceClass.category})
+        {applianceClass.name}
+      </div>
+      <div className="inline-flex gap-1">
+        <div
+          className={cn("text-xs", {
+            "text-white": qty === 0,
+            "text-black": qty > 0,
+          })}
+        >
+          Category {applianceClass.category}
+        </div>
+        <div className=""></div>
+        <div
+          className={cn("text-xs", {
+            "text-white": qty === 0,
+            "text-black": qty > 0,
+          })}
+        >
+          {applianceClass.power / 1000} kWh
+        </div>
       </div>
       <div
         className={cn("text-xs", {
           "text-[#23DCCA]": qty === 0,
           "text-black": qty > 0,
         })}
-      >
-        {applianceClass.power / 1000} kWh
-      </div>
-      {qty === 0 && (
+      ></div>
+      {disabled && (
+        <button
+          disabled={true}
+          className="flex items-center gap-1 mt-3 rounded-full text-sm border px-4 py-1 border-[#637AA6]"
+        >
+          <span className="font-bold text-[#637AA6]">Add</span>
+          <AddCircle sx={{ fill: "#637AA6", fontSize: 18 }} />
+        </button>
+      )}
+      {!disabled && qty === 0 && (
         <button
           className="flex items-center gap-1 mt-3 rounded-full text-sm border px-4 py-1 border-[#23DCCA]"
           onClick={addAppliance}
@@ -77,7 +111,7 @@ export const ApplianceCard = ({ src, slug }: { src: string; slug: string }) => {
           <AddCircle sx={{ fill: "#23DCCA", fontSize: 18 }} />
         </button>
       )}
-      {qty > 0 && (
+      {!disabled && qty > 0 && (
         <div className="mt-3 flex items-center gap-2 bg-white px-4 py-1 rounded-full">
           {qty === 1 && (
             <button>
