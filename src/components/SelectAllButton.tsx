@@ -19,7 +19,7 @@ export const SelectAllButton = () => {
 
   return (
     <button
-      className={cn("border border-white px-3 py-1 rounded-md text-xs", {
+      className={cn("border border-white px-2 py-1 rounded-md text-xs", {
         "opacity-30": allSelected,
       })}
       disabled={allSelected}

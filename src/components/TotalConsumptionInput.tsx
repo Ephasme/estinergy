@@ -55,8 +55,10 @@ export function TotalConsumptionInput() {
       </div>
       {hasErrors && (
         <div className="absolute -bottom-2 translate-y-[100%] bg-[#E93535] px-3 py-1 rounded-lg">
-          {errors.map((message) => (
-            <div className="text-white text-sm">{message}</div>
+          {errors.map((message, idx) => (
+            <div key={idx} className="text-white text-sm">
+              {message}
+            </div>
           ))}
         </div>
       )}

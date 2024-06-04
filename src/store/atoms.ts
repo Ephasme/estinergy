@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+import { atomEffect } from "jotai-effect";
 import { ApplianceWithConsumption, ApplianceWithId } from "@/types/Appliance";
 import { Category } from "@/types/Category";
 import { MINIMAL_RUNTIME_BY_CATEGORY } from "@/constants";
@@ -12,6 +13,19 @@ export const appliancesWithConsumptionAtom = atom<Record<
   string,
   ApplianceWithConsumption
 > | null>(null);
+
+export const estimatedTotalConsumptionAtom = atom((get) => {
+  const appliancesWithConsumption = get(appliancesWithConsumptionAtom);
+
+  if (!appliancesWithConsumption) {
+    return null;
+  }
+
+  return _.sumBy(
+    Object.values(appliancesWithConsumption),
+    (a) => a.consumption
+  );
+});
 
 export const totalEstimatedConsumptionAtom = atom((get) => {
   const appliancesWithConsumption = get(appliancesWithConsumptionAtom);
@@ -63,4 +77,12 @@ export const totalConsumptionMinAtom = atom((get) => {
   );
 
   return minimalConsumptionTotal;
+});
+
+export const resetEffect = atomEffect((get, set) => {
+  get(totalConsumptionAtom);
+  get(appliancesAtom);
+  get(emailAtom);
+
+  set(appliancesWithConsumptionAtom, null);
 });

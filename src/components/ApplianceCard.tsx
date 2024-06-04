@@ -58,25 +58,25 @@ export const ApplianceCard = ({ src, slug }: { src: string; slug: string }) => {
   return (
     <div
       className={cn(
-        "p-6 rounded-2xl flex flex-col items-center justify-center gap-3 ",
+        "p-6 rounded-2xl flex flex-col items-center justify-center",
         {
           "bg-[#0B3179]": qty === 0,
           "bg-[#23DCCA]": qty > 0,
         }
       )}
     >
-      <img className="h-20 w-20" src={src} />
+      <img className="h-20 w-20 mb-5" src={src} />
       <div
-        className={cn("text-sm", {
+        className={cn("text-sm mb-1 font-medium", {
           "text-white": qty === 0,
           "text-black": qty > 0,
         })}
       >
         {applianceClass.name}
       </div>
-      <div className="inline-flex items-center gap-1">
+      <div className="inline-flex items-center gap-1 mb-6">
         <div
-          className={cn("text-xs", {
+          className={cn("text-xs font-light", {
             "text-white": qty === 0,
             "text-black": qty > 0,
           })}
@@ -90,7 +90,7 @@ export const ApplianceCard = ({ src, slug }: { src: string; slug: string }) => {
           })}
         ></div>
         <div
-          className={cn("text-xs", {
+          className={cn("text-xs font-light", {
             "text-white": qty === 0,
             "text-black": qty > 0,
           })}

@@ -7,15 +7,19 @@ import smallLightSrc from "@/assets/smallLight.png";
 import tvSrc from "@/assets/tv.png";
 import washingMachineSrc from "@/assets/washingMachine.png";
 import { ApplianceCard } from "@/components/ApplianceCard";
+import { ClearAllButton } from "@/components/ClearAllButton";
+import { ComputeButton } from "@/components/ComputeButton";
 import { EmailInput } from "@/components/EmailInput";
 import { Logo } from "@/components/Logo";
+import { ResultPanel } from "@/components/ResultPanel";
 import { SelectAllButton } from "@/components/SelectAllButton";
 import { TotalConsumptionInput } from "@/components/TotalConsumptionInput";
-import { ClearAllButton } from "./components/ClearAllButton";
-import { ComputeButton } from "./components/ComputeButton";
-import { ResultPanel } from "./components/ResultPanel";
+import { resetEffect } from "@/store/atoms";
+import { useAtom } from "jotai";
 
 function App() {
+  useAtom(resetEffect);
+
   return (
     <div className="h-screen w-screen grid grid-rows-[60px_auto] bg-[#002160]">
       <div className="h-full flex items-center bg-[#0A2C6F] border-b border-[#3D5B8C]">
@@ -23,10 +27,10 @@ function App() {
           <Logo />
         </div>
         <div className="flex gap-10">
-          <div className="text-sm">accueil</div>
-          <div className="text-sm">nos cas d'usage</div>
+          <div className="text-sm">home</div>
+          <div className="text-sm">our study cases</div>
           <div className="text-sm">blog</div>
-          <div className="text-sm">à propos</div>
+          <div className="text-sm">about</div>
         </div>
       </div>
       <div className="grid grid-cols-[3fr_2fr] overflow-auto">
@@ -45,7 +49,7 @@ function App() {
               <TotalConsumptionInput />
             </div>
           </div>
-          <div className="w-full grid grid-cols-[1fr_auto_80px_auto] gap-4 items-baseline mt-10 mb-7">
+          <div className="w-full grid grid-cols-[1fr_auto_70px_auto] gap-4 items-baseline mt-10 mb-7">
             <div className="text-2xl">Select your appliances</div>
             <ClearAllButton />
             <SelectAllButton />

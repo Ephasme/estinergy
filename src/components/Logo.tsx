@@ -6,7 +6,7 @@ export const Logo = () => (
     viewBox="0 0 67 22"
     fill="none"
   >
-    <g clip-path="url(#clip0_650_3569)">
+    <g clipPath="url(#clip0_650_3569)">
       <path
         fillRule="evenodd"
         clipRule="evenodd"

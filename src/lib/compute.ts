@@ -21,6 +21,11 @@ export const compute =
     }
 
     let minDiffT = Infinity;
+    let maxPossibleHours = {
+      A: Infinity,
+      F: Infinity,
+      L: Infinity,
+    };
     let appliancesWithConsumption: Record<
       string,
       ApplianceWithConsumption
@@ -29,6 +34,15 @@ export const compute =
     for (const a of CATEGORIES.A.possibleRuntimeHours) {
       for (const f of CATEGORIES.F.possibleRuntimeHours) {
         for (const l of CATEGORIES.L.possibleRuntimeHours) {
+          console.log({ a, f, l });
+          if (
+            a >= maxPossibleHours.A &&
+            f >= maxPossibleHours.F &&
+            l >= maxPossibleHours.L
+          ) {
+            continue;
+          }
+
           const runtimeHoursByCategory: Record<Category, number> = {
             A: a,
             F: f,
@@ -59,9 +73,18 @@ export const compute =
 
           const { A: E_a, F: E_f, L: E_l } = currentConsumptionByCategory;
           const diff = totalConsumption - (E_a + E_f + E_l);
+          if (
+            diff < 0 &&
+            maxPossibleHours.A > a &&
+            maxPossibleHours.F > f &&
+            maxPossibleHours.L > l
+          ) {
+            maxPossibleHours = { A: a, F: f, L: l };
+          }
           if (diff >= 0 && diff < minDiffT) {
             minDiffT = diff;
             appliancesWithConsumption = currentAppliancesWithConsumption;
+            console.log(">>> SELECTED");
           }
         }
       }
